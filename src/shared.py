@@ -6,5 +6,5 @@ FAIL_EXTENSION_WARNING_COUNT = 10
 
 class CyantizeState(BaseModel):
     files_to_process: list[Path]
-    files_passed: dict[Path, bool] = dict()
+    files_passed: dict[str, bool] = dict()
     failed_extensions: dict[str, int] = dict()

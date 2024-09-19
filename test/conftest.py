@@ -1,7 +1,7 @@
 import toml
 import pytest
 
-from test.consts import PROJECT_DIR
+from src.consts import PROJECT_DIR
 from src.config import CyantizeConfig
 
 

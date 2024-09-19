@@ -5,21 +5,23 @@ sys.path.append(str(Path(__file__).parent.parent))  # noqa
 import click.types
 import pydantic
 import toml
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.shared import CyantizeState
 from src.config import CyantizeConfig
 from src.log import get_logger
-from src import filetype
+from src import file_type_scan
 
+PROJECT_DIR = Path(__file__).parent.parent
 logger = get_logger(__name__)
 
 
 @click.command()
-@click.argument("config_path", type=click.types.Path(exists=True, dir_okay=False))
 @click.argument("scan_dir", type=click.types.Path(exists=True, file_okay=False))
-def main(config_path: Path, scan_dir: Path) -> None:
+def main(scan_dir: Path) -> None:
     logger.info("start")
+
+    config_path = PROJECT_DIR / "cyantize.toml"
     try:
         config_dict = toml.load(config_path)
     except toml.TomlDecodeError:
@@ -46,10 +48,20 @@ def main(config_path: Path, scan_dir: Path) -> None:
 
     pool = ThreadPoolExecutor()
 
-    scanners = [filetype.scan]
+    scanners = [file_type_scan.scan]
+
+    futures = []
+    names = []
 
     for scan_func in scanners:
-        pool.submit(scan_func, config, state)
+        futures.append(pool.submit(scan_func, config, state))
+        names.append(scan_func.__name__)
+
+    for i, future in enumerate(as_completed(futures)):
+        try:
+            future.result()
+        except Exception:
+            logger.exception("scan %s failed", names[i])
 
     pool.shutdown(wait=True)
     logger.info("finish", extra=dict(files_passed=state.files_passed))
