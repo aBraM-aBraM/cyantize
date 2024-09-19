@@ -1,13 +1,16 @@
+from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).parent.parent))  # noqa
 import click.types
 import pydantic
 import toml
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-from shared import CyantizeState
-from config import CyantizeConfig
-from log import get_logger
-import filetype
+from src.shared import CyantizeState
+from src.config import CyantizeConfig
+from src.log import get_logger
+from src import filetype
 
 logger = get_logger(__name__)
 
