@@ -1,7 +1,11 @@
 import click.types
 import toml
-from config import CyantizeConfig
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
+
+import shared
+from config import CyantizeConfig
+import filetype
 
 
 @click.command()
@@ -12,8 +16,15 @@ def main(config_path: Path, scan_dir: Path) -> None:
 
     config = CyantizeConfig.model_validate(config_dict)
 
-    print(config)
-    print(type(config_path), type(scan_dir))
+    files_to_process = [file for file in Path(scan_dir).rglob("*") if file.is_file()]
+    shared.g_state.processed_file_count = len(files_to_process)
+
+    pool = ThreadPoolExecutor()
+
+    scanners = [(filetype.scan, config.filetypes)]
+
+    for scan_func, scan_conf in scanners:
+        pool.submit(scan_func, scan_conf, files_to_process)
 
 
 if __name__ == "__main__":

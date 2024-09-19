@@ -1,2 +1,3 @@
 
-filetypes = { jpeg = "allow" }
+[filetypes]
+filetypes = {jpeg = "allow" }
