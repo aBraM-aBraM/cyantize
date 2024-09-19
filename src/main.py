@@ -39,12 +39,13 @@ def main(scan_dir: Path) -> None:
         logger.exception("config value can't be validated")
         raise
 
-    files_to_process = [file for file in Path(scan_dir).rglob("*") if file.is_file()]
-
     # This state is not thread-safe it is only written to here
     # before more threads appear. All other threads should only read from it
-    state = CyantizeState(files_to_process=files_to_process)
-    logger.info("processing %d files", len(state.files_to_process))
+    state = CyantizeState()
+    state.add_files_to_scan(
+        [file for file in Path(scan_dir).rglob("*") if file.is_file()]
+    )
+    logger.info("processing %d files", len(state.files_to_scan))
 
     pool = ThreadPoolExecutor()
 

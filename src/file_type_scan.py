@@ -48,7 +48,7 @@ def scan(config: CyantizeConfig, state: CyantizeState) -> None:
 
     magic = Magic(mime=True)
 
-    for file_path in state.files_to_process:
+    for file_path in state.files_to_scan:
         mime_from_extension = get_mime_from_extension(file_path, extension_to_mime)
 
         if not mime_from_extension:
@@ -58,11 +58,8 @@ def scan(config: CyantizeConfig, state: CyantizeState) -> None:
         with open(file_path, "rb") as file:
             mime_from_content = magic.from_buffer(file.read(1024))
 
-        if file_path not in state.files_passed.keys():
-            state.files_passed[str(file_path)] = True
-
         if mime_from_extension != mime_from_content:
-            state.files_passed[str(file_path)] = False
+            state.set_file_invalid(file_path)
             increase_extension_fail_count(state, file_path.suffix)
             logging.info(
                 "file verification failed for %s extension",
