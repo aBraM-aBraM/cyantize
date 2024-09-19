@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 from pythonjsonlogger import jsonlogger
 
@@ -19,6 +20,6 @@ def get_logger(name: str) -> logging.Logger:
     logger.addHandler(file_handler)
     logger.addHandler(stdout_handler)
 
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.getLevelName(os.environ.get("LOG_LEVEL", "INFO")))
 
     return logger

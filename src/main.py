@@ -51,6 +51,9 @@ def main(config_path: Path, scan_dir: Path) -> None:
     for scan_func in scanners:
         pool.submit(scan_func, config, state)
 
+    pool.shutdown(wait=True)
+    logger.info("finish", extra=dict(files_passed=state.files_passed))
+
 
 if __name__ == "__main__":
     main()

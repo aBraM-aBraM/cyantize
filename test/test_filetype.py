@@ -13,3 +13,5 @@ def test_filetype_sanity(config, files_to_process):
     state = CyantizeState(files_to_process=files_to_process)
 
     scan(config, state)
+
+    assert len(state.files_passed) == len(files_to_process)
