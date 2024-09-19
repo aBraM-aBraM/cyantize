@@ -1,12 +1,12 @@
-from pathlib import Path
-from config import FileTypeConfig
+from config import CyantizeConfig
 from log import get_logger
+from shared import CyantizeState
 
 logger = get_logger(__name__)
 
 
-def scan(config: FileTypeConfig, files_to_process: list[Path]) -> None:
+def scan(config: CyantizeConfig, state: CyantizeState) -> None:
     logger.info("starting filetype scan")
-    logger.debug("supported file types: %s", config.filetypes)
-    for file in files_to_process:
+    logger.debug("supported file types: %s", config.filetypes.filetypes)
+    for file in state.files_to_process:
         logger.info("scanning %s", file)

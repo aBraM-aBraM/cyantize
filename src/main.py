@@ -4,7 +4,7 @@ import toml
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-import shared
+from shared import CyantizeState
 from config import CyantizeConfig
 from log import get_logger
 import filetype
@@ -35,15 +35,18 @@ def main(config_path: Path, scan_dir: Path) -> None:
         raise
 
     files_to_process = [file for file in Path(scan_dir).rglob("*") if file.is_file()]
-    shared.g_state.processed_file_count = len(files_to_process)
-    logger.info("processing %d files", shared.g_state.processed_file_count)
+
+    # This state is not thread-safe it is only written to here
+    # before more threads appear. All other threads should only read from it
+    state = CyantizeState(files_to_process=files_to_process)
+    logger.info("processing %d files", len(state.files_to_process))
 
     pool = ThreadPoolExecutor()
 
-    scanners = [(filetype.scan, config.filetypes)]
+    scanners = [filetype.scan]
 
-    for scan_func, scan_conf in scanners:
-        pool.submit(scan_func, scan_conf, files_to_process)
+    for scan_func in scanners:
+        pool.submit(scan_func, config, state)
 
 
 if __name__ == "__main__":
