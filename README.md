@@ -14,6 +14,7 @@ Purpose:
 sudo apt install -y pre-commit
 pre-commit install
 
+git lfs fetch --all
 ```
 
 ## Test
@@ -21,3 +22,5 @@ pre-commit install
 ```commandline
 pytest test
 ```
+
+resources are taken from https://file-examples.com/

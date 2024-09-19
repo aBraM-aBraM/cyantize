@@ -1,0 +1,2 @@
+*.correct* filter=lfs diff=lfs merge=lfs -text
+*.incorrect* filter=lfs diff=lfs merge=lfs -text
