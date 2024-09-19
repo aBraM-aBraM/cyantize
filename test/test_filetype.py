@@ -15,3 +15,12 @@ def test_filetype_sanity(config, files_to_process):
     scan(config, state)
 
     assert len(state.files_passed) == len(files_to_process)
+
+    # TODO: add checks for fail types
+    # TODO: check fail counts
+
+
+def test_when_filetype_extension_fail_multiple_times_warning_issued(
+    config, files_to_process
+):
+    pass
