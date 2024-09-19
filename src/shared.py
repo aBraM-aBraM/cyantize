@@ -11,7 +11,7 @@ class CyantizeState(BaseModel):
     _file_to_status: dict[str, bool] = dict()
     failed_extensions: dict[str, int] = dict()
 
-    def add_files_to_scan(self, files: list[Path]):
+    def add_files_to_scan(self, files: set[Path]):
         for file in files:
             self._file_to_status[str(file)] = True
 
@@ -19,21 +19,21 @@ class CyantizeState(BaseModel):
         self._file_to_status[str(file)] = False
 
     @property
-    def files_to_scan(self):
-        return [Path(file) for file, has_passed in self._file_to_status.items()]
+    def files_to_scan(self) -> set:
+        return {Path(file) for file, has_passed in self._file_to_status.items()}
 
     @property
-    def files_passed(self):
-        return [
+    def files_passed(self) -> set:
+        return {
             Path(file)
             for file, has_passed in self._file_to_status.items()
             if has_passed
-        ]
+        }
 
     @property
-    def files_failed(self):
-        return [
+    def files_failed(self) -> set:
+        return {
             Path(file)
             for file, has_passed in self._file_to_status.items()
             if not has_passed
-        ]
+        }

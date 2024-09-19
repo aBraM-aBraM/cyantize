@@ -43,7 +43,7 @@ def main(scan_dir: Path) -> None:
     # before more threads appear. All other threads should only read from it
     state = CyantizeState()
     state.add_files_to_scan(
-        [file for file in Path(scan_dir).rglob("*") if file.is_file()]
+        {file for file in Path(scan_dir).rglob("*") if file.is_file()}
     )
     logger.info("processing %d files", len(state.files_to_scan))
 

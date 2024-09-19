@@ -1,0 +1,3 @@
+[conflicts]
+wmv = { instances = ["video/x-ms-wmv", "video/x-ms-asf"], reason = "libmagic can't read what's inside asf https://bugs.astron.com/view.php?id=84" }
+ogg = { instances = ["audio/ogg", "video/ogg"], reason = "libmagic have this difference" }

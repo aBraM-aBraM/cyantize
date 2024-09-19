@@ -1,5 +1,6 @@
+from pydantic import BaseModel
 from pathlib import Path
-import json
+import toml
 import logging
 from magic import Magic
 import mimetypes
@@ -7,7 +8,7 @@ import mimetypes
 from src.config import CyantizeConfig
 from src.log import get_logger
 from src.shared import CyantizeState, FAIL_EXTENSION_WARNING_COUNT
-from src.consts import PROJECT_DIR
+from src.consts import MIME_TYPES_FILE, MIME_CONFLICTS_FILE
 
 logger = get_logger(__name__)
 
@@ -40,25 +41,47 @@ def get_mime_from_extension(
     return None
 
 
+class Conflict(BaseModel):
+    instances: list[str]
+    reason: str
+
+
 def scan(config: CyantizeConfig, state: CyantizeState) -> None:
     logger.info("starting filetype scan")
 
-    with open(PROJECT_DIR / "apache-mime.types.txt") as mimes_file:
-        extension_to_mime = json.load(mimes_file)
+    with open(MIME_TYPES_FILE) as mimes_file:
+        extension_to_mime = toml.load(mimes_file)
+
+    with open(MIME_CONFLICTS_FILE) as mime_conflicts_file:
+        # This is my organized way of solving conflicts between libmagic and mimetypes
+        mime_conflicts_raw = toml.load(mime_conflicts_file)
+        mime_conflicts = {
+            extension: Conflict.model_validate(conflict)
+            for extension, conflict in mime_conflicts_raw["conflicts"].items()
+        }
 
     magic = Magic(mime=True)
+    mimetypes.init()
 
     for file_path in state.files_to_scan:
         mime_from_extension = get_mime_from_extension(file_path, extension_to_mime)
+        extension = file_path.suffix[1:]
 
         if not mime_from_extension:
-            logging.warning("unknown extension", extra=dict(extension=file_path.suffix))
+            logging.warning("unknown extension", extra=dict(extension=extension))
             continue
 
         with open(file_path, "rb") as file:
             mime_from_content = magic.from_buffer(file.read(1024))
-
         if mime_from_extension != mime_from_content:
+            if extension in mime_conflicts.keys():
+                conflict = mime_conflicts[extension]
+                if (
+                    mime_from_extension in conflict.instances
+                    and mime_from_content in conflict.instances
+                ):
+                    continue
+
             state.set_file_invalid(file_path)
             increase_extension_fail_count(state, file_path.suffix)
             logging.info(
