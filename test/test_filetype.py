@@ -19,10 +19,10 @@ def test_filetype_sanity(config, correct_files, incorrect_files):
 
     scan(config, state)
 
-    assert sum(state.files_passed.values()) == len(correct_files)
-
-    # TODO: add checks for fail types
-    # TODO: check fail counts
+    files_pass_count = sum(state.files_passed.values())
+    files_fail_count = len(state.files_to_process) - files_pass_count
+    assert files_pass_count == len(correct_files)
+    assert files_fail_count == len(incorrect_files)
 
 
 def test_when_filetype_extension_fail_multiple_times_warning_issued(
