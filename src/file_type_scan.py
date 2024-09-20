@@ -49,7 +49,9 @@ def solve_conflict(
 def load_conflicts(file_path: Path):
     conflicts: dict[str, list[str]] = {}
     with open(MIME_TYPES_FILE) as mimes_file:
-        content = [line for line in mimes_file.readlines() if not line.startswith("#")]
+        content = [
+            line.split() for line in mimes_file.readlines() if not line.startswith("#")
+        ]
         for mimetype, *extensions in content:
             conflicts[mimetype] = extensions
     return conflicts

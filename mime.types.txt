@@ -57,6 +57,7 @@ application/cdmi-container			cdmic
 application/cdmi-domain				cdmid
 application/cdmi-object				cdmio
 application/cdmi-queue				cdmiq
+application/CDFV2                   xls doc ppt
 # application/cdni
 # application/cea
 # application/cea-2018+xml
@@ -1579,7 +1580,7 @@ image/vnd.fst					fst
 image/vnd.fujixerox.edmics-mmr			mmr
 image/vnd.fujixerox.edmics-rlc			rlc
 # image/vnd.globalgraphics.pgb
-# image/vnd.microsoft.icon
+image/vnd.microsoft.icon    ico
 # image/vnd.mix
 # image/vnd.mozilla.apng
 image/vnd.ms-modi				mdi
@@ -1697,7 +1698,7 @@ text/javascript					js mjs
 text/n3						n3
 # text/parameters
 # text/parityfec
-text/plain					txt text conf def list log in
+text/plain					txt text conf def list log in json
 # text/provenance-notation
 # text/prs.fallenstein.rst
 text/prs.lines.tag				dsc
@@ -1706,7 +1707,7 @@ text/prs.lines.tag				dsc
 # text/red
 # text/rfc822-headers
 text/richtext					rtx
-# text/rtf
+text/rtf    rtf
 # text/rtp-enc-aescm128
 # text/rtploopback
 # text/rtx
@@ -1759,7 +1760,7 @@ text/x-sfv					sfv
 text/x-uuencode					uu
 text/x-vcalendar				vcs
 text/x-vcard					vcf
-# text/xml
+text/xml                    xml
 # text/xml-external-parsed-entity
 # video/1d-interleaved-parityfec
 video/3gpp					3gp
@@ -1793,7 +1794,7 @@ video/mpeg					mpeg mpg mpe m1v m2v
 # video/mpeg4-generic
 # video/mpv
 # video/nv
-video/ogg					ogv
+video/ogg					ogv ogg
 # video/parityfec
 # video/pointer
 video/quicktime					qt mov
@@ -1847,7 +1848,7 @@ video/x-flv					flv
 video/x-m4v					m4v
 video/x-matroska				mkv mk3d mks
 video/x-mng					mng
-video/x-ms-asf					asf asx
+video/x-ms-asf					asf asx wmv
 video/x-ms-vob					vob
 video/x-ms-wm					wm
 video/x-ms-wmv					wmv
