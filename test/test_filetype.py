@@ -14,7 +14,7 @@ def incorrect_files():
     return {file for file in RESOURCE_DIR.glob("*.incorrect.*") if file.is_file()}
 
 
-def test_filetype_sanity(config, correct_files, incorrect_files, mime_types):
+def test_filetype_sanity(config, correct_files, incorrect_files):
     state = CyantizeState()
     state.add_files_to_scan(correct_files.union(incorrect_files))
 
@@ -28,11 +28,24 @@ def test_filetype_sanity(config, correct_files, incorrect_files, mime_types):
     )
 
 
+def test_filetype_benchmark(config, correct_files, benchmark):
+    state = CyantizeState()
+
+    def multiple_run(run_state):
+        for _ in range(10):
+            run_state._file_to_status = dict()
+            run_state.add_files_to_scan(correct_files)
+            scan(config, run_state)
+
+    benchmark(multiple_run, state)
+    assert len(state.files_passed) == len(correct_files)
+
+
 def test_filetype__where_file_without_extension():
     pass
 
 
-def test_filetype__where_unsupported_extension():
+def test_filetype__with_unsupported_extension():
     pass
 
 
