@@ -30,6 +30,14 @@ def increase_extension_fail_count(state: CyantizeState, extension: str) -> None:
 def solve_conflict(
     mime_from_extension: str, mime_from_content: str, conflicts: dict[str, list[str]]
 ):
+    """
+    This exists for the occasion of having different mimes that mean the same thing
+    the conflicts file maps mime to extensions. Multiple mimes can have the same extensions
+    to solve this conflicts.
+
+    When a file fails the logs can be used to decide if the conflict is real
+    or rather another mime should have this extension
+    """
     extension_groups: list[set] = []
 
     for mime in [mime_from_extension, mime_from_content]:
@@ -48,7 +56,7 @@ def solve_conflict(
 
 def load_conflicts(file_path: Path):
     conflicts: dict[str, list[str]] = {}
-    with open(MIME_TYPES_FILE) as mimes_file:
+    with open(file_path) as mimes_file:
         content = [
             line.split() for line in mimes_file.readlines() if not line.startswith("#")
         ]
@@ -58,6 +66,13 @@ def load_conflicts(file_path: Path):
 
 
 def scan(config: CyantizeConfig, state: CyantizeState) -> None:
+    """
+    I tried making this code async by making every file scan a task
+    changing I/O to use aiofiles and making it async
+
+    My benchmark test median doubled the time at best, so I'm keeping
+    it sequential for now
+    """
     logger.info("starting filetype scan")
 
     conflicts = load_conflicts(MIME_TYPES_FILE)
