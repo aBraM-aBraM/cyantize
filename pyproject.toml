@@ -19,3 +19,6 @@ pytest-benchmark = "^4.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+cyantize = "cyantize.main:main"

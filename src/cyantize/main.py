@@ -7,10 +7,10 @@ import pydantic
 import toml
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from src.shared import CyantizeState
-from src.config import CyantizeConfig
-from src.log import get_logger
-from src import file_type_scan
+from cyantize.shared import CyantizeState
+from cyantize.config import CyantizeConfig
+from cyantize.log import get_logger
+from cyantize import file_type_scan
 
 PROJECT_DIR = Path(__file__).parent.parent
 logger = get_logger(__name__)
@@ -66,7 +66,3 @@ def main(scan_dir: Path) -> None:
 
     pool.shutdown(wait=True)
     logger.info("finish", extra=dict(files_passed=[str(f) for f in state.files_passed]))
-
-
-if __name__ == "__main__":
-    main()

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-PROJECT_DIR = Path(__file__).parent.parent
+PROJECT_DIR = Path(__file__).parent.parent.parent
 CONFIG_PATH = PROJECT_DIR / "cyantize.toml"
 TEST_DIR = PROJECT_DIR / "test"
 RESOURCE_DIR = TEST_DIR / "resource"

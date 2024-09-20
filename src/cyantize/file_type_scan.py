@@ -2,10 +2,10 @@ from pathlib import Path
 from magic import Magic
 import mimetypes
 
-from src.config import CyantizeConfig
-from src.log import get_logger
-from src.shared import CyantizeState, FAIL_EXTENSION_WARNING_COUNT
-from src.consts import MIME_TYPES_FILE
+from cyantize.config import CyantizeConfig
+from cyantize.log import get_logger
+from cyantize.shared import CyantizeState, FAIL_EXTENSION_WARNING_COUNT
+from cyantize.consts import MIME_TYPES_FILE
 
 logger = get_logger(__name__)
 
