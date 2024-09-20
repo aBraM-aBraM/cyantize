@@ -18,6 +18,8 @@ def test_filetype_sanity(config, correct_files, incorrect_files, mime_types):
     state = CyantizeState()
     state.add_files_to_scan(correct_files.union(incorrect_files))
 
+    config.filetypes.suppress_extensions.append("jpg")
+
     scan(config, state)
 
     assert len(state.files_passed) == len(correct_files), correct_files.difference(

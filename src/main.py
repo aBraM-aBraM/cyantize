@@ -65,7 +65,7 @@ def main(scan_dir: Path) -> None:
             logger.exception("scan %s failed", names[i])
 
     pool.shutdown(wait=True)
-    logger.info("finish", extra=dict(files_passed=state.files_passed))
+    logger.info("finish", extra=dict(files_passed=[str(f) for f in state.files_passed]))
 
 
 if __name__ == "__main__":

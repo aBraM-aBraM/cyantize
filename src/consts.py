@@ -5,5 +5,4 @@ CONFIG_PATH = PROJECT_DIR / "cyantize.toml"
 TEST_DIR = PROJECT_DIR / "test"
 RESOURCE_DIR = TEST_DIR / "resource"
 
-MIME_TYPES_FILE = PROJECT_DIR / "mime.types.toml"
-MIME_CONFLICTS_FILE = PROJECT_DIR / "mime.conflicts.toml"
+MIME_TYPES_FILE = PROJECT_DIR / "mime.types.txt"

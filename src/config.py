@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class FileTypeConfig(BaseModel):
-    filetypes: dict[str, str]
+    suppress_extensions: list[str]
 
 
 class CyantizeConfig(BaseModel):
