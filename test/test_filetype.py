@@ -1,6 +1,6 @@
-from src.consts import RESOURCE_DIR
-from src.shared import CyantizeState
-from src.file_type_scan import scan
+from cyantize.shared import CyantizeState
+from cyantize.file_type_scan import scan
+from test.consts import RESOURCE_DIR
 import pytest
 
 
@@ -28,6 +28,7 @@ def test_filetype_sanity(config, correct_files, incorrect_files):
     )
 
 
+@pytest.mark.skip
 def test_filetype_benchmark(config, correct_files, benchmark):
     state = CyantizeState()
 

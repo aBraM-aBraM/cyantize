@@ -20,6 +20,7 @@ git lfs fetch --all
 ## Test
 
 ```commandline
+pip3 install -e .
 pytest test
 ```
 
