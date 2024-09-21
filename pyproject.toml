@@ -14,6 +14,7 @@ python-json-logger = "^2.0.7"
 pytest = "^8.3.3"
 python-magic = "^0.4.27"
 pytest-benchmark = "^4.0.0"
+cryptography = "^43.0.1"
 
 
 [build-system]
@@ -22,3 +23,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 cyantize = "cyantize.main:main"
+
+[tool.ruff]
+line-length = 140
