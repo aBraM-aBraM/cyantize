@@ -1,0 +1,8 @@
+services:
+  backend:
+    build: .
+    volumes:
+      - ${INPUT_PATH}:/opt/input
+      - ${CYANTIZE_DIR_PATH}:/root/.config/cyantize/
+      - ${OUT_LOG_DIR_PATH}:/usr/src/app
+    command: [ "/usr/src/venv/bin/python3", "-m", "cyantize", "/opt/input"]
