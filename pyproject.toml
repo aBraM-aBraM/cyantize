@@ -15,6 +15,7 @@ pytest = "^8.3.3"
 python-magic = "^0.4.27"
 pytest-benchmark = "^4.0.0"
 cryptography = "^43.0.1"
+pip = "^24.2"
 
 
 [build-system]

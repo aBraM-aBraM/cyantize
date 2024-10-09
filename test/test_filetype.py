@@ -20,12 +20,8 @@ def test_filetype_sanity(config, correct_files, incorrect_files):
 
     scan(config, state)
 
-    assert len(state.files_passed) == len(correct_files), correct_files.difference(
-        state.files_passed
-    )
-    assert len(state.files_failed) == len(incorrect_files), incorrect_files.difference(
-        state.files_failed
-    )
+    assert len(state.files_passed) == len(correct_files), [str(p) for p in correct_files.difference(state.files_passed)]
+    assert len(state.files_failed) == len(incorrect_files), [str(p) for p in incorrect_files.difference(state.files_failed)]
 
 
 @pytest.mark.skip
@@ -50,7 +46,5 @@ def test_filetype__with_unsupported_extension():
     pass
 
 
-def test_when_filetype_extension_fail_multiple_times_warning_issued(
-    config, incorrect_files
-):
+def test_when_filetype_extension_fail_multiple_times_warning_issued(config, incorrect_files):
     pass
