@@ -1,5 +1,5 @@
 from pathlib import Path
-from magic import Magic
+from magika import Magika
 import mimetypes
 
 from cyantize.config import CyantizeConfig
@@ -19,17 +19,14 @@ def increase_extension_fail_count(state: CyantizeState, extension: str) -> None:
     fail_count = state.failed_extensions[extension]
     if fail_count == FAIL_EXTENSION_WARNING_COUNT + 1:
         logger.warning(
-            "extension %s failed more than %d times. "
-            "You can disable it manually by adding it to %s in the configuration",
+            "extension %s failed more than %d times. " "You can disable it manually by adding it to %s in the configuration",
             extension,
             FAIL_EXTENSION_WARNING_COUNT,
             "config.filetypes.suppress_extensions",
         )
 
 
-def solve_conflict(
-    mime_from_extension: str, mime_from_content: str, conflicts: dict[str, list[str]]
-):
+def solve_conflict(mime_from_extension: str, mime_from_content: str, conflicts: dict[str, list[str]]):
     """
     This exists for the occasion of having different mimes that mean the same thing
     the conflicts file maps mime to extensions. Multiple mimes can have the same extensions
@@ -57,9 +54,7 @@ def solve_conflict(
 def load_conflicts(file_path: Path):
     conflicts: dict[str, list[str]] = {}
     with open(file_path) as mimes_file:
-        content = [
-            line.split() for line in mimes_file.readlines() if not line.startswith("#")
-        ]
+        content = [line.split() for line in mimes_file.readlines() if not line.startswith("#")]
         for mimetype, *extensions in content:
             conflicts[mimetype] = extensions
     return conflicts
@@ -76,7 +71,7 @@ def scan(config: CyantizeConfig, state: CyantizeState) -> None:
     logger.info("starting filetype scan")
 
     conflicts = load_conflicts(MIME_TYPES_FILE)
-    magic = Magic(mime=True)
+    magic = Magika()
     mimetypes.init([MIME_TYPES_FILE])
 
     for file_path in state.files_to_scan:
@@ -92,13 +87,12 @@ def scan(config: CyantizeConfig, state: CyantizeState) -> None:
             )
             continue
 
-        with open(file_path, "rb") as file:
-            mime_from_content = magic.from_buffer(file.read(1024))
+        magika_result = magic.identify_path(file_path)
+        mime_from_content = magika_result.output.mime_type
 
-        if not mime_from_content:
-            logger.error(
-                "failed getting mime from content", extra=dict(file_path=str(file_path))
-            )
+        if magika_result.output.ct_label == "unknown":
+            logger.error("failed getting mime from content", extra=dict(file_path=str(file_path)))
+            continue
 
         if mime_from_extension != mime_from_content:
             if not solve_conflict(mime_from_extension, mime_from_content, conflicts):
